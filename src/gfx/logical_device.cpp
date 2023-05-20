@@ -30,7 +30,8 @@ LogicalDevice::LogicalDevice(const Instance &instance, const PhysicalDevice &phy
 
     createInfo.pEnabledFeatures = &deviceFeatures;
 
-    createInfo.enabledExtensionCount = 0;
+    createInfo.enabledExtensionCount = static_cast<u32>(deviceExtensions.size());
+    createInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
     if(instance.validate) {
         createInfo.enabledLayerCount = static_cast<u32>(instance.validationLayers.size());

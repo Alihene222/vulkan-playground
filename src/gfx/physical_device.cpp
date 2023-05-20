@@ -1,6 +1,8 @@
 #include <vector>
+#include <set>
 
 #include "physical_device.hpp"
+#include "swapchain.hpp"
 
 using namespace gfx;
 
@@ -34,7 +36,15 @@ PhysicalDevice::PhysicalDevice(const Instance &instance, WindowSurface *windowSu
 bool PhysicalDevice::isDeviceSuitable(VkPhysicalDevice device) {
     QueueFamilyIndices indices = findQueueFamilies(device, this->windowSurface);
 
-    return indices.isComplete();
+    bool extensionsSupported = checkDeviceExtensionSupport(device);
+
+    bool swapchainAdequate = false;
+    if (extensionsSupported) {
+        SwapchainSupportDetails swapChainSupport = Swapchain::querySwapchainSupport(device, *this->windowSurface);
+        swapchainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
+    }
+
+    return indices.isComplete() && extensionsSupported && swapchainAdequate;
 }
 
 QueueFamilyIndices PhysicalDevice::findQueueFamilies(VkPhysicalDevice device, WindowSurface *windowSurface) {
@@ -67,4 +77,20 @@ QueueFamilyIndices PhysicalDevice::findQueueFamilies(VkPhysicalDevice device, Wi
     }
 
     return indices;
+}
+
+bool PhysicalDevice::checkDeviceExtensionSupport(VkPhysicalDevice device) {
+    u32 extensionCount;
+    vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
+
+    std::vector<VkExtensionProperties> availableExtensions(extensionCount);
+    vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
+
+    std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
+
+    for (const auto& extension : availableExtensions) {
+        requiredExtensions.erase(extension.extensionName);
+    }
+
+    return requiredExtensions.empty();
 }

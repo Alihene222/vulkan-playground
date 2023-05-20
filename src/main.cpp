@@ -5,6 +5,7 @@
 #include "gfx/physical_device.hpp"
 #include "gfx/logical_device.hpp"
 #include "gfx/window_surface.hpp"
+#include "gfx/swapchain.hpp"
 
 int main() {
     gfx::Window window("Hello, World!", 640, 640, false);
@@ -13,11 +14,13 @@ int main() {
     gfx::WindowSurface windowSurface(instance, window);
     gfx::PhysicalDevice physicalDevice(instance, &windowSurface);
     gfx::LogicalDevice logicalDevice(instance, physicalDevice, &windowSurface);
+    gfx::Swapchain swapchain(&physicalDevice, &logicalDevice, window);
 
     while(!window.isCloseRequested()) {
         glfwPollEvents();
     }
 
+    swapchain.destroy();
     windowSurface.destroy(instance);
     
     return 0;

@@ -18,6 +18,12 @@ public:
     static QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device, WindowSurface *windowSurface);
 private:
     bool isDeviceSuitable(VkPhysicalDevice device);
+
+    const std::vector<const char*> deviceExtensions = {
+        VK_KHR_SWAPCHAIN_EXTENSION_NAME
+    };
+
+    bool checkDeviceExtensionSupport(VkPhysicalDevice device);
 };
 
 }

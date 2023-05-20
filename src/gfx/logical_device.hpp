@@ -10,15 +10,19 @@ namespace gfx {
 
 class LogicalDevice {
 public:
+    VkDevice handle;
+
     LogicalDevice(const Instance &instance, const PhysicalDevice &physicalDevice, WindowSurface *windowSurface);
 
     ~LogicalDevice();
 private:
-    VkDevice handle;
-
     VkQueue graphicsQueue;
 
     VkQueue presentQueue;
+
+    const std::vector<const char*> deviceExtensions = {
+        VK_KHR_SWAPCHAIN_EXTENSION_NAME
+    };
 };
 
 }
