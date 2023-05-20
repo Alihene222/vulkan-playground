@@ -3,8 +3,12 @@
 
 #include <optional>
 
-#include <GLFW/glfw3.h>
 #include <vulkan/vulkan.h>
+#define VK_USE_PLATFORM_X11_KHR
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
+#define GLFW_EXPOSE_NATIVE_X11
+#include <GLFW/glfw3native.h>
 
 #include "util.hpp"
 
@@ -13,9 +17,10 @@ namespace gfx {
 class QueueFamilyIndices {
 public:
     std::optional<u32> graphicsFamily;
+    std::optional<u32> presentFamily;
 
     inline bool isComplete() {
-        return graphicsFamily.has_value();
+        return graphicsFamily.has_value() && presentFamily.has_value();
     }
 };
 

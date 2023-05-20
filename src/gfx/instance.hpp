@@ -24,6 +24,8 @@ public:
     
     ~Instance();
 
+    void setupDebugMessgener();
+
     static void fillDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT &createInfo);
 private:
     std::vector<const char*> getRequiredExtensions(bool validate);

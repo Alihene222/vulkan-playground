@@ -1,25 +1,32 @@
+#include <set>
+
 #include "logical_device.hpp"
 
 using namespace gfx;
 
-LogicalDevice::LogicalDevice(const Instance &instance, const PhysicalDevice &physicalDevice) {
-    QueueFamilyIndices indices = PhysicalDevice::findQueueFamilies(physicalDevice.handle);
+LogicalDevice::LogicalDevice(const Instance &instance, const PhysicalDevice &physicalDevice, WindowSurface *windowSurface) {
+    QueueFamilyIndices indices = PhysicalDevice::findQueueFamilies(physicalDevice.handle, windowSurface);
 
-    VkDeviceQueueCreateInfo queueCreateInfo {};
-    queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-    queueCreateInfo.queueFamilyIndex = indices.graphicsFamily.value();
-    queueCreateInfo.queueCount = 1;
+    std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
+    std::set<u32> uniqueQueueFamilies = {indices.graphicsFamily.value(), indices.presentFamily.value()};
 
     f32 queuePriority = 1.0f;
-    queueCreateInfo.pQueuePriorities = &queuePriority;
+    for(u32 queueFamily : uniqueQueueFamilies) {
+        VkDeviceQueueCreateInfo queueCreateInfo {};
+        queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+        queueCreateInfo.queueFamilyIndex = indices.graphicsFamily.value();
+        queueCreateInfo.queueCount = 1;
+        queueCreateInfo.pQueuePriorities = &queuePriority;
+        queueCreateInfos.push_back(queueCreateInfo);
+    }
 
     VkPhysicalDeviceFeatures deviceFeatures {};
     
     VkDeviceCreateInfo createInfo {};
     createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 
-    createInfo.pQueueCreateInfos = &queueCreateInfo;
-    createInfo.queueCreateInfoCount = 1;
+    createInfo.queueCreateInfoCount = static_cast<u32>(queueCreateInfos.size());
+    createInfo.pQueueCreateInfos = queueCreateInfos.data();
 
     createInfo.pEnabledFeatures = &deviceFeatures;
 
@@ -38,6 +45,7 @@ LogicalDevice::LogicalDevice(const Instance &instance, const PhysicalDevice &phy
     }
 
     vkGetDeviceQueue(this->handle, indices.graphicsFamily.value(), 0, &this->graphicsQueue);
+    vkGetDeviceQueue(this->handle, indices.presentFamily.value(), 0, &this->presentQueue);
 }
 
 LogicalDevice::~LogicalDevice() {

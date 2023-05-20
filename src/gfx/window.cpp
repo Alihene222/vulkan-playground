@@ -1,8 +1,6 @@
 #include "window.hpp"
 
-using namespace gfx;
-
-Window::Window(std::string name, u16 width, u16 height, bool resizable) {
+gfx::Window::Window(std::string name, u16 width, u16 height, bool resizable) {
     if(!glfwInit()) {
         std::cerr << "Failed to initialize GLFW" << std::endl;
         std::exit(-1);
@@ -14,11 +12,11 @@ Window::Window(std::string name, u16 width, u16 height, bool resizable) {
     this->handle = glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr);
 }
 
-Window::~Window() {
+gfx::Window::~Window() {
     glfwDestroyWindow(this->handle);
     glfwTerminate();
 }
 
-bool Window::isCloseRequested() {
+bool gfx::Window::isCloseRequested() {
     return glfwWindowShouldClose(this->handle);
 }

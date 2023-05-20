@@ -46,7 +46,15 @@ Instance::Instance(std::string name, bool validate) {
         std::cerr << "Instance creation failed" << std::endl;
         std::exit(-1);
     }
+}
 
+Instance::~Instance() {
+    gfx::vkDestroyDebugUtilsMessengerEXT(this->handle, this->debugMessenger, nullptr);
+
+    vkDestroyInstance(this->handle, nullptr);
+}
+
+void Instance::setupDebugMessgener() {
     if(validate) {
         VkDebugUtilsMessengerCreateInfoEXT debugMessengerCreateInfo;
         fillDebugMessengerCreateInfo(debugMessengerCreateInfo);
@@ -56,12 +64,6 @@ Instance::Instance(std::string name, bool validate) {
             std::exit(-1);
         }
     }
-}
-
-Instance::~Instance() {
-    gfx::vkDestroyDebugUtilsMessengerEXT(this->handle, this->debugMessenger, nullptr);
-
-    vkDestroyInstance(this->handle, nullptr);
 }
 
 void Instance::fillDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT &createInfo) {

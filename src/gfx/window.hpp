@@ -10,13 +10,13 @@ namespace gfx {
 
 class Window {
 public:
+    GLFWwindow *handle;
+
     Window(std::string name, u16 width, u16 height, bool resizable);
 
     ~Window();
 
     bool isCloseRequested();
-private:
-    GLFWwindow *handle;
 };
 
 }

@@ -4,7 +4,9 @@
 
 using namespace gfx;
 
-PhysicalDevice::PhysicalDevice(const Instance &instance) {
+PhysicalDevice::PhysicalDevice(const Instance &instance, WindowSurface *windowSurface) {
+    this->windowSurface = windowSurface;
+
     u32 deviceCount = 0;
     vkEnumeratePhysicalDevices(instance.handle, &deviceCount, nullptr);
 
@@ -30,12 +32,12 @@ PhysicalDevice::PhysicalDevice(const Instance &instance) {
 }
 
 bool PhysicalDevice::isDeviceSuitable(VkPhysicalDevice device) {
-    QueueFamilyIndices indices = findQueueFamilies(device);
+    QueueFamilyIndices indices = findQueueFamilies(device, this->windowSurface);
 
     return indices.isComplete();
 }
 
-QueueFamilyIndices PhysicalDevice::findQueueFamilies(VkPhysicalDevice device) {
+QueueFamilyIndices PhysicalDevice::findQueueFamilies(VkPhysicalDevice device, WindowSurface *windowSurface) {
     QueueFamilyIndices indices;
 
     u32 queueFamilyCount = 0;
@@ -46,8 +48,15 @@ QueueFamilyIndices PhysicalDevice::findQueueFamilies(VkPhysicalDevice device) {
 
     int i = 0;
     for (const auto& queueFamily : queueFamilies) {
+        VkBool32 presentSupport = false;
+        vkGetPhysicalDeviceSurfaceSupportKHR(device, i, windowSurface->handle, &presentSupport);
+
         if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
             indices.graphicsFamily = i;
+        }
+
+        if (presentSupport) {
+            indices.presentFamily = i;
         }
 
         if (indices.isComplete()) {

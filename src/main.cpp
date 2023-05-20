@@ -4,16 +4,21 @@
 #include "gfx/window.hpp"
 #include "gfx/physical_device.hpp"
 #include "gfx/logical_device.hpp"
+#include "gfx/window_surface.hpp"
 
 int main() {
     gfx::Window window("Hello, World!", 640, 640, false);
     gfx::Instance instance("Hello, World!", true);
-    gfx::PhysicalDevice physicalDevice(instance);
-    gfx::LogicalDevice logicalDevice(instance, physicalDevice);
+    instance.setupDebugMessgener();
+    gfx::WindowSurface windowSurface(instance, window);
+    gfx::PhysicalDevice physicalDevice(instance, &windowSurface);
+    gfx::LogicalDevice logicalDevice(instance, physicalDevice, &windowSurface);
 
     while(!window.isCloseRequested()) {
         glfwPollEvents();
     }
+
+    windowSurface.destroy(instance);
     
     return 0;
 }
