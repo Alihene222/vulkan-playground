@@ -4,4 +4,4 @@ then
     mkdir bin
 fi
 
-clang++ -std=c++20 -g -iquote"src" -L"lib" -I"include" src/main.cpp src/gfx/window.cpp src/gfx/instance.cpp src/gfx/physical_device.cpp -o bin/application -lvulkan -lglfw3
+clang++ -std=c++20 -g -iquote"src" -L"lib" -I"include" src/main.cpp src/gfx/window.cpp src/gfx/instance.cpp src/gfx/physical_device.cpp src/gfx/logical_device.cpp -o bin/application -lvulkan -lglfw3

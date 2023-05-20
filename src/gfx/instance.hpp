@@ -14,6 +14,10 @@ public:
 
     bool validate;
 
+    const std::vector<const char*> validationLayers = {
+	    "VK_LAYER_KHRONOS_validation"
+    };
+
     VkDebugUtilsMessengerEXT debugMessenger;
 
     Instance(std::string name, bool validate);
@@ -22,10 +26,6 @@ public:
 
     static void fillDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT &createInfo);
 private:
-    const std::vector<const char*> validationLayers = {
-	    "VK_LAYER_KHRONOS_validation"
-    };
-
     std::vector<const char*> getRequiredExtensions(bool validate);
 };
 

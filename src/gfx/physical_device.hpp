@@ -8,13 +8,13 @@ namespace gfx {
 
 class PhysicalDevice {
 public:
-    PhysicalDevice(const Instance &instance);
-private:
     VkPhysicalDevice handle = VK_NULL_HANDLE;
 
-    bool isDeviceSuitable(VkPhysicalDevice device);
+    PhysicalDevice(const Instance &instance);
 
-    QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
+    static QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
+private:
+    bool isDeviceSuitable(VkPhysicalDevice device);
 };
 
 }
