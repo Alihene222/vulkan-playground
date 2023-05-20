@@ -51,7 +51,7 @@ Instance::Instance(std::string name, bool validate) {
         VkDebugUtilsMessengerCreateInfoEXT debugMessengerCreateInfo;
         fillDebugMessengerCreateInfo(debugMessengerCreateInfo);
 
-        if (vkCreateDebugUtilsMessengerEXT(this->handle, &debugMessengerCreateInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
+        if (gfx::vkCreateDebugUtilsMessengerEXT(this->handle, &debugMessengerCreateInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
 	        std::cerr << "Failed to set up debug messenger" << std::endl;
             std::exit(-1);
         }
@@ -59,7 +59,7 @@ Instance::Instance(std::string name, bool validate) {
 }
 
 Instance::~Instance() {
-    vkDestroyDebugUtilsMessengerEXT(this->handle, this->debugMessenger, nullptr);
+    gfx::vkDestroyDebugUtilsMessengerEXT(this->handle, this->debugMessenger, nullptr);
 
     vkDestroyInstance(this->handle, nullptr);
 }

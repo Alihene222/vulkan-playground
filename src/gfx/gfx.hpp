@@ -1,8 +1,23 @@
 #ifndef GFX_HPP
 #define GFX_HPP
 
+#include <optional>
+
 #include <GLFW/glfw3.h>
 #include <vulkan/vulkan.h>
+
+#include "util.hpp"
+
+namespace gfx {
+
+class QueueFamilyIndices {
+public:
+    std::optional<u32> graphicsFamily;
+
+    inline bool isComplete() {
+        return graphicsFamily.has_value();
+    }
+};
 
 inline VkResult vkCreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger) {
     auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
@@ -20,5 +35,6 @@ inline void vkDestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMes
     }
 }
 
+}
 
 #endif
