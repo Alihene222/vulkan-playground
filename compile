@@ -1,0 +1,7 @@
+#!/bin/bash
+if [ ! -d "bin/" ]
+then
+    mkdir bin
+fi
+
+clang++ -std=c++20 -g -iquote"src" -L"lib" -I"include" src/main.cpp src/gfx/window.cpp src/gfx/instance.cpp -o bin/application -lvulkan -lglfw3
