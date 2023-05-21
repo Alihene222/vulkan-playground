@@ -4,4 +4,7 @@ then
     mkdir bin
 fi
 
-clang++ -std=c++20 -g -iquote"src" -L"lib" -I"include" src/main.cpp src/gfx/window.cpp src/gfx/instance.cpp src/gfx/physical_device.cpp src/gfx/logical_device.cpp src/gfx/window_surface.cpp src/gfx/swapchain.cpp -o bin/application -lvulkan -lglfw3
+glslc res/shaders/core.vert -o bin/shaders/coreVert.spv
+glslc res/shaders/core.frag -o bin/shaders/coreFrag.spv
+
+clang++ -std=c++20 -g -iquote"src" -L"lib" -I"include" src/main.cpp src/gfx/window.cpp src/gfx/instance.cpp src/gfx/physical_device.cpp src/gfx/logical_device.cpp src/gfx/window_surface.cpp src/gfx/swapchain.cpp src/gfx/pipeline.cpp -o bin/application -lvulkan -lglfw3

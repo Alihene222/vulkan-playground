@@ -6,6 +6,7 @@
 #include "gfx/logical_device.hpp"
 #include "gfx/window_surface.hpp"
 #include "gfx/swapchain.hpp"
+#include "gfx/pipeline.hpp"
 
 int main() {
     gfx::Window window("Hello, World!", 640, 640, false);
@@ -15,6 +16,8 @@ int main() {
     gfx::PhysicalDevice physicalDevice(instance, &windowSurface);
     gfx::LogicalDevice logicalDevice(instance, physicalDevice, &windowSurface);
     gfx::Swapchain swapchain(&physicalDevice, &logicalDevice, window);
+    gfx::Pipeline pipeline(&logicalDevice, swapchain);
+    pipeline.createShaderModules("bin/shaders/coreVert.spv", "bin/shaders/coreFrag.spv");
 
     while(!window.isCloseRequested()) {
         glfwPollEvents();

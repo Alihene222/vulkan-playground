@@ -2,6 +2,9 @@
 #define GFX_HPP
 
 #include <optional>
+#include <vector>
+#include <iostream>
+#include <fstream>
 
 #include <vulkan/vulkan.h>
 #define VK_USE_PLATFORM_X11_KHR
@@ -38,6 +41,25 @@ inline void vkDestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMes
     if (func != nullptr) {
         func(instance, debugMessenger, pAllocator);
     }
+}
+
+inline std::vector<char> readShaderFile(const std::string &path) {
+    std::ifstream file(path, std::ios::ate | std::ios::binary);
+
+    if (!file.is_open()) {
+        std::cerr << "Failed to open file " << path << std::endl;
+        std::exit(-1);
+    }
+
+    size_t fileSize = (size_t) file.tellg();
+    std::vector<char> buffer(fileSize);
+
+    file.seekg(0);
+    file.read(buffer.data(), fileSize);
+
+    file.close();
+
+    return buffer;
 }
 
 }
