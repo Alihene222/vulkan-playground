@@ -22,7 +22,7 @@ public:
 
     Instance(std::string name, bool validate);
     
-    ~Instance();
+    void destroy();
 
     void setupDebugMessgener();
 

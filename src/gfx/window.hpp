@@ -14,7 +14,7 @@ public:
 
     Window(std::string name, u16 width, u16 height, bool resizable);
 
-    ~Window();
+    void destroy();
 
     bool isCloseRequested();
 };

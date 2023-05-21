@@ -49,6 +49,6 @@ LogicalDevice::LogicalDevice(const Instance &instance, const PhysicalDevice &phy
     vkGetDeviceQueue(this->handle, indices.presentFamily.value(), 0, &this->presentQueue);
 }
 
-LogicalDevice::~LogicalDevice() {
+void LogicalDevice::destroy() {
     vkDestroyDevice(this->handle, nullptr);
 }

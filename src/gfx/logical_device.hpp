@@ -14,7 +14,7 @@ public:
 
     LogicalDevice(const Instance &instance, const PhysicalDevice &physicalDevice, WindowSurface *windowSurface);
 
-    ~LogicalDevice();
+    void destroy();
 private:
     VkQueue graphicsQueue;
 

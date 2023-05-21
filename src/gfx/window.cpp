@@ -12,7 +12,7 @@ gfx::Window::Window(std::string name, u16 width, u16 height, bool resizable) {
     this->handle = glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr);
 }
 
-gfx::Window::~Window() {
+void gfx::Window::destroy() {
     glfwDestroyWindow(this->handle);
     glfwTerminate();
 }

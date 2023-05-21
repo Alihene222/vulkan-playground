@@ -48,7 +48,7 @@ Instance::Instance(std::string name, bool validate) {
     }
 }
 
-Instance::~Instance() {
+void Instance::destroy() {
     gfx::vkDestroyDebugUtilsMessengerEXT(this->handle, this->debugMessenger, nullptr);
 
     vkDestroyInstance(this->handle, nullptr);

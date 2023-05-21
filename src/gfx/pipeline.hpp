@@ -13,7 +13,7 @@ class Pipeline {
 public:
     Pipeline(LogicalDevice *logicalDevice, const Swapchain &swapchain);
 
-    ~Pipeline();
+    void destroy();
 
     void createShaderModules(std::string vertexPath, std::string fragmentPath);
 private:

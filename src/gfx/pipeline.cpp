@@ -91,7 +91,7 @@ Pipeline::Pipeline(LogicalDevice *logicalDevice, const Swapchain &swapchain) {
     }
 }
 
-Pipeline::~Pipeline() {
+void Pipeline::destroy() {
     vkDestroyPipelineLayout(this->logicalDevice->handle, this->layout, nullptr);
 
     vkDestroyShaderModule(this->logicalDevice->handle, this->fragmentShader, nullptr);
