@@ -91,6 +91,34 @@ void Swapchain::destroy() {
     vkDestroySwapchainKHR(this->logicalDevice->handle, this->handle, nullptr);
 }
 
+void Swapchain::createFramebuffers(const VkRenderPass &renderPass) {
+    this->framebuffers.resize(this->images.size());
+    for (size_t i = 0; i < this->imageViews.size(); i++) {
+        VkImageView attachments[] = {
+            this->imageViews[i]
+        };
+
+        VkFramebufferCreateInfo framebufferInfo {};
+        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        framebufferInfo.renderPass = renderPass;
+        framebufferInfo.attachmentCount = 1;
+        framebufferInfo.pAttachments = attachments;
+        framebufferInfo.width = this->extent.width;
+        framebufferInfo.height = this->extent.height;
+        framebufferInfo.layers = 1;
+
+        if (vkCreateFramebuffer(this->logicalDevice->handle, &framebufferInfo, nullptr, &this->framebuffers[i]) != VK_SUCCESS) {
+            std::cerr << "Failed to create a framebuffer" << std::endl;
+        }
+    }
+}
+
+void Swapchain::destroyFramebuffers() {
+    for (auto framebuffer : this->framebuffers) {
+        vkDestroyFramebuffer(this->logicalDevice->handle, framebuffer, nullptr);
+    }
+}
+
 SwapchainSupportDetails Swapchain::querySwapchainSupport(VkPhysicalDevice device, const WindowSurface &windowSurface) {
     SwapchainSupportDetails details;
 

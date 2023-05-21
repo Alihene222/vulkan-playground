@@ -31,6 +31,10 @@ public:
 
     void destroy();
 
+    void createFramebuffers(const VkRenderPass &renderPass);
+
+    void destroyFramebuffers();
+
     static SwapchainSupportDetails querySwapchainSupport(VkPhysicalDevice device, const WindowSurface &windowSurface);
 private:
     VkSwapchainKHR handle;
@@ -38,6 +42,8 @@ private:
     PhysicalDevice *physicalDevice;
 
     LogicalDevice *logicalDevice;
+    
+    std::vector<VkFramebuffer> framebuffers;
 
     VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> &availableFormats);
 

@@ -8,12 +8,12 @@ namespace gfx {
 
 class RenderPass {
 public:
+    VkRenderPass handle;
+
     RenderPass(LogicalDevice *logicalDevice, const Swapchain &swapchain);
 
     void destroy();
 private:
-    VkRenderPass handle;
-
     LogicalDevice *logicalDevice;
 };
 

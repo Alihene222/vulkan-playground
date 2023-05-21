@@ -17,14 +17,16 @@ int main() {
     gfx::PhysicalDevice physicalDevice(instance, &windowSurface);
     gfx::LogicalDevice logicalDevice(instance, physicalDevice, &windowSurface);
     gfx::Swapchain swapchain(&physicalDevice, &logicalDevice, window);
+    gfx::RenderPass renderPass(&logicalDevice, swapchain);
     gfx::Pipeline pipeline(&logicalDevice, swapchain);
     pipeline.createShaderModules("bin/shaders/coreVert.spv", "bin/shaders/coreFrag.spv");
-    gfx::RenderPass renderPass(&logicalDevice, swapchain);
+    swapchain.createFramebuffers(renderPass.handle);
 
     while(!window.isCloseRequested()) {
         glfwPollEvents();
     }
 
+    swapchain.destroyFramebuffers();
     pipeline.destroy();
     renderPass.destroy();
     swapchain.destroy();

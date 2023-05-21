@@ -2,7 +2,7 @@
 
 using namespace gfx;
 
-RenderPass::RenderPass(LogicalDevice *logicalDevice, const Swapchain &swapchain) {
+RenderPass::RenderPass(LogicalDevice *logicalDevice, const gfx::Swapchain &swapchain) {
     this->logicalDevice = logicalDevice;
 
     VkAttachmentDescription colorAttachment {};
