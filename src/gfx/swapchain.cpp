@@ -59,9 +59,35 @@ Swapchain::Swapchain(PhysicalDevice *physicalDevice, LogicalDevice *logicalDevic
         std::cerr << "Failed to create swapchain" << std::endl;
         std::exit(-1);
     }
+
+    this->imageViews.resize(this->images.size());
+    for (size_t i = 0; i < images.size(); i++) {
+        VkImageViewCreateInfo imageViewCreateInfo {};
+        imageViewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        imageViewCreateInfo.image = images[i];
+        imageViewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        imageViewCreateInfo.format = this->format;
+        imageViewCreateInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+        imageViewCreateInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+        imageViewCreateInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+        imageViewCreateInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+        imageViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        imageViewCreateInfo.subresourceRange.baseMipLevel = 0;
+        imageViewCreateInfo.subresourceRange.levelCount = 1;
+        imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
+        imageViewCreateInfo.subresourceRange.layerCount = 1;
+
+        if (vkCreateImageView(logicalDevice->handle, &imageViewCreateInfo, nullptr, &imageViews[i]) != VK_SUCCESS) {
+            std::cerr << "Failed to create image views" << std::endl;
+            std::exit(-1);
+        }
+    }
 }
 
 void Swapchain::destroy() {
+    for (auto imageView : imageViews) {
+        vkDestroyImageView(this->logicalDevice->handle, imageView, nullptr);
+    }
     vkDestroySwapchainKHR(this->logicalDevice->handle, this->handle, nullptr);
 }
 
